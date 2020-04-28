@@ -1,0 +1,59 @@
+{
+    "builders": [
+        {
+            "type": "vmware-iso",
+            "name": "{{user `template_name`}}",
+            "remote_type": "esx5",
+            "remote_host": "{{user `remote_host`}}",
+            "remote_username": "{{user `remote_username`}}",
+            "remote_password": "{{user `remote_password`}}",
+            "remote_datastore": "{{user `remote_datastore`}}",
+            "ssh_username": "template",
+            "ssh_password": "template",
+            "network": "{{user `network`}}",
+            "memory": "1024",
+            "http_directory": "http",
+            "http_port_min": 80,
+            "http_port_max": 80,
+            "iso_checksum_type": "file",
+            "iso_checksum": "{{user `ubuntu_or_debian_checksum_file`}}",
+            "iso_url": "{{user `ubuntu_or_debian_iso`}}",
+            "vnc_disable_password": true,
+            "vmx_data": {
+                "ethernet0.networkName": "{{user `vm_network`}}",
+                "ethernet0.present": "TRUE",
+                "ethernet0.startConnected": "TRUE",
+                "ethernet0.virtualDev": "vmxnet3",
+                "ethernet0.addressType": "generated",
+                "ethernet0.wakeOnPcktRcv": "FALSE"
+            },
+            "ssh_timeout": "15m",
+            "boot_command": [
+                "<esc><wait>",
+                "install",
+                " auto=true",
+                " debian-installer=en_US auto=true locale=en_US kbd-chooser/method=us",
+                " keyboard-configuration/xkb-keymap=us",
+                " netcfg/disable_dhcp=true",
+                " netcfg/disable_autoconfig=true",
+                " netcfg/confirm_static=true",
+                " netcfg/get_hostname={{ .Name }}",
+                " netcfg/get_domain=nullgrid.net",
+                " netcfg/get_ipaddress=10.0.0.200",
+                " netcfg/get_netmask=255.255.255.0",
+                " netcfg/get_gateway=10.0.0.254",
+                " netcfg/get_nameservers=10.0.0.254",
+                " preseed/url=http://{{ .HTTPIP }}/preseed.cfg",
+                "<enter>"
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "ls /"
+            ]
+        }
+    ]
+}
