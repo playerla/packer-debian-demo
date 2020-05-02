@@ -1,6 +1,7 @@
 {
     "builders": [
         {
+            "shutdown_command": "sudo shutdown -P now",
             "type": "vmware-iso",
             "name": "{{user `template_name`}}",
             "remote_type": "esx5",
@@ -8,8 +9,8 @@
             "remote_username": "{{user `remote_username`}}",
             "remote_password": "{{user `remote_password`}}",
             "remote_datastore": "{{user `remote_datastore`}}",
-            "ssh_username": "template",
-            "ssh_password": "template",
+            "ssh_username": "debian",
+            "ssh_password": "debian",
             "network": "{{user `network`}}",
             "memory": "1024",
             "http_directory": "http",
@@ -28,12 +29,14 @@
                 "ethernet0.wakeOnPcktRcv": "FALSE"
             },
             "ssh_timeout": "15m",
+            "keep_registered": true,
+            "skip_export": true,
+            "boot_key_interval": true,
             "boot_command": [
                 "<esc><wait>",
                 "install",
                 " auto=true",
-                " debian-installer=en_US auto=true locale=en_US kbd-chooser/method=us",
-                " keyboard-configuration/xkb-keymap=us",
+                " locale=fr_FR.UTF-8 keyboard-configuration/layoutcode=fr keyboard-configuration/variantcode=latin9 keymap=fr",
                 " netcfg/disable_dhcp=true",
                 " netcfg/disable_autoconfig=true",
                 " netcfg/confirm_static=true",
@@ -52,7 +55,13 @@
         {
             "type": "shell",
             "inline": [
-                "ls /"
+                "sudo sed 's/TIMEOUT=5/TIMEOUT=1/' -i /etc/default/grub",
+                "sudo update-grub",
+                "wget 'https://raw.githubusercontent.com/vmware/cloud-init-vmware-guestinfo/master/install.sh'",
+                "sudo sh install.sh",
+                "ls /usr/lib/python3/dist-packages/cloudinit/sources/DataSourceVMwareGuestInfo.py /etc/cloud/cloud.cfg.d/99-DataSourceVMwareGuestInfo.cfg",
+                "sudo sh -c \"echo 'source /etc/network/interfaces.d/*' > /etc/network/interfaces\"",
+                "sudo sh -c \"echo 'allow-hotplug ens160' >> /etc/network/interfaces\""
             ]
         }
     ]

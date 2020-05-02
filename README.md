@@ -20,17 +20,20 @@ esxcli network firewall ruleset set --enabled=true --ruleset-id=gdbserver
 esxcli network firewall ruleset set --enabled=true --ruleset-id=httpClient
 ```
 
-### Run
+## Run
 
 ```sh
 packer build -var-file variables.json template.json
 ```
 
-### Generated template
+## Generated template
 
-Default username and password is `template`, defined in preseed.cfg and used in template.json
+- cloud-init with VMX Datasource (https://github.com/vmware/cloud-init-vmware-guestinfo)
+- ansible
 
-# Inspiration
+Default sudoer username and password are `debian`, defined in preseed.cfg and used in template.json
+
+## Inspiration
 
 - https://github.com/nickcharlton/packer-esxi
 - https://gist.github.com/lorin/5140029
