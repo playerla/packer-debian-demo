@@ -4,7 +4,11 @@
     "remote_datastore": "datastore1",
     "remote_username": "esx-account",
     "remote_password": "esx-password",
-    "ubuntu_or_debian_iso": "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.3.0-amd64-netinst.iso",
+    "ubuntu_or_debian_iso": "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-10.4.0-amd64-netinst.iso",
     "ubuntu_or_debian_checksum_file": "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/SHA256SUMS",
-    "vm_network": "VM Network"
+    "vm_network": "VM Network",
+    "netmask": "255.255.255.0",
+    "ipaddress": "10.0.0.200",
+    "nameservers": "10.0.0.254",
+    "gateway": "10.0.0.254"
 }
